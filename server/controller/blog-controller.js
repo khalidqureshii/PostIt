@@ -3,8 +3,8 @@ import BlogEntry from "../models/blog-model.js";
 
 const newBlog = async (req, res) => {
     try {
-        const {userID, username, title, body} = req.body;
-        const newPost = await BlogEntry.create({userID, username, title, body});
+        const {userID, username, title, body, tags} = req.body;
+        const newPost = await BlogEntry.create({userID, username, title, body, tags});
         res.status(200).json({msg: "Blog Created", post: newPost});
     }
     catch (err) {
@@ -24,7 +24,27 @@ const getBlogs = async (req, res) => {
     try {
         const reversedOutput = await BlogEntry.find();
         const output = reversedOutput.reverse();
-        res.status(200).json({msg: "All Entries Returned", allEntries: output});
+        res.status(200).json({msg: "All Blogs Returned", allEntries: output});
+    }
+    catch (err) {
+        const status = 401;
+        const message = "User Token Does Not Exist";
+        const extraDetails = err.errors[0].message.toString();
+        const errorDetails = {
+            message,
+            status,
+            extraDetails
+        }
+        next(errorDetails);
+    }
+}
+
+const getBlogsByTag = async (req, res) => {
+    const {tag} = req.body;
+    try {
+        const reversedOutput = await BlogEntry.find({ tags: { $in: tag } });
+        const output = reversedOutput.reverse();
+        res.status(200).json({msg: `All Blogs by Tag ${tag} Returned`, allEntries: output});
     }
     catch (err) {
         const status = 401;
@@ -44,7 +64,7 @@ const getUserBlogs = async (req, res) => {
         const {userID} = req.body;
         const reversedOutput = await BlogEntry.find({userID});
         const output = reversedOutput.reverse();
-        res.status(200).json({msg: "All Entries Returned", allEntries: output});
+        res.status(200).json({msg: "All Blogs by User Returned", allEntries: output});
     }
     catch (err) {
         const status = 401;
@@ -64,7 +84,7 @@ const deleteBlog = async (req, res) => {
     try {
         const {blogID} = req.body;
         const output = await BlogEntry.deleteOne({_id: blogID});
-        res.status(200).json({msg: "Successfully Deleted"});
+        res.status(200).json({msg: "Successfully Deleted Blog"});
     }
     catch (err) {
         const status = 401;
@@ -79,4 +99,4 @@ const deleteBlog = async (req, res) => {
     }
 }
 
-export {newBlog, getBlogs, deleteBlog, getUserBlogs};
+export {newBlog, getBlogs, deleteBlog, getUserBlogs, getBlogsByTag};
