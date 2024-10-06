@@ -5,14 +5,12 @@ const validateLogin = (schema) => async (req, res, next) => {
         next();
     }
     catch (err) {
-        const status = 404;
-        const message = "Fill the input properly";
-        const extraDetails = err.errors[0].message;
+        const status = 400;
+        const message = err.errors[0].message;
         const errorDetails = {
             message,
-            status,
-            extraDetails
-        }
+            status
+        };
         next(errorDetails);
     }
 };
