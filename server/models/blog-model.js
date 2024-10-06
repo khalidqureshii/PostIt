@@ -24,7 +24,12 @@ const blogSchema = new mongoose.Schema({
     body: {
         type: String,
         require: true
-    }
+    },
+
+    tags: [{
+        type: String,
+        default: []
+    }]
 });
 
 const BlogEntry = mongoose.model("blogs", blogSchema);

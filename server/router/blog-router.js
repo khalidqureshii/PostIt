@@ -7,5 +7,6 @@ blogRouter.route("/newBlog").post(BlogControllers.newBlog);
 blogRouter.route("/getBlogs").get(BlogControllers.getBlogs);
 blogRouter.route("/deleteBlog").delete(BlogControllers.deleteBlog);
 blogRouter.route("/getUserBlogs").post(BlogControllers.getUserBlogs);
+blogRouter.route("/getBlogsByTag").post(BlogControllers.getBlogsByTag);
 
 export default blogRouter;
