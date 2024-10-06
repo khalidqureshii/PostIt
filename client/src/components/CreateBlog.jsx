@@ -14,11 +14,14 @@ import {useAuth} from "../store/Auth";
 const CreateBlog = () => {
   const navigate = useNavigate();
   const {user} = useAuth();
+  const currUserID = user._id;
+  const currUsername = user.username;
   const [formData, setFormData] = useState({
-    userID: user._id,
-    username: user.username,
+    userID: currUserID,
+    username: currUsername,
     title: "",
-    body: ""
+    body: "",
+    tags: ['Others']
   });
 
   const changeFunction = (e) => {
@@ -43,28 +46,29 @@ const CreateBlog = () => {
 //     });
 //   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  async function handleSubmit (){
 
-    const postData = new FormData();
-    postData.append("userID", formData.userID);
-    postData.append("username", formData.username);
-    postData.append("title", formData.title);
-    postData.append("body", formData.body);
+    const postData = formData;
+    postData.userID = currUserID;
+    postData.username = currUsername;
+    console.log(postData);
 
     try {
       const response = await fetch("http://localhost:5000/api/blog/newBlog", {
         method: "POST",
-        body: postData, 
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(postData)
       });
 
       const result = await response.json();
 
       if (response.ok) {
         console.log(result);
-        console.log(formData.title, formData.body);
+        // console.log(formData.title, formData.body);
         alert("Post submitted successfully!");
-        navigate("/"); // Navigate to homepage after successful submission
+        // navigate("/"); 
       } else {
         console.error("Error:", result);
         alert("Failed to submit the post");
@@ -77,17 +81,18 @@ const CreateBlog = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 bg-custom">
-      <div className="w-full max-w-lg bg-white outer-shadow p-8 rounded-lg shadow-md">
+      <div className="w-full max-w-5xl bg-white outer-shadow p-8 rounded-lg shadow-md">
         <h1 className="text-3xl font-bold mb-6 text-center text-black font-cambria">
           Create a New Blog
         </h1>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <InputTitle
+          <InputArea
             text="Title"
             name="title"
             value={formData.title}
             changeFunction={changeFunction}
-            placeholder="Enter blog title"
+            placeholder="Enter blog Title"
+            rows={2}
+            cols={40}
           />
           <InputArea
             text="Content"
@@ -95,6 +100,8 @@ const CreateBlog = () => {
             value={formData.body}
             changeFunction={changeFunction}
             placeholder="Enter blog content"
+            rows={10}
+            cols={40}
           />
           {/* <TextAreaField
             label="Description"
@@ -125,11 +132,11 @@ const CreateBlog = () => {
             <button
               type="submit"
               className="customButton w-24"
+              onClick={handleSubmit}
             >
               Post
             </button>
           </div>
-        </form>
       </div>
     </div>
   );

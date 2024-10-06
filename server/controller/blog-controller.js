@@ -4,6 +4,11 @@ import BlogEntry from "../models/blog-model.js";
 const newBlog = async (req, res) => {
     try {
         const {userID, username, title, body, tags} = req.body;
+        console.log(req.body);
+        // console.log(username);
+        // console.log(title);
+        // console.log(body);
+        // console.log(tags);
         const newPost = await BlogEntry.create({userID, username, title, body, tags});
         res.status(200).json({msg: "Blog Created", post: newPost});
     }
