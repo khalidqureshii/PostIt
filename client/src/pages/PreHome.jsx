@@ -16,7 +16,7 @@ function PreHome() {
 
     useEffect(() => {
         if (isLoggedIn) {
-            navigate("/home");
+            navigate("/posthome");
         }
         else {
           navigate("/login");

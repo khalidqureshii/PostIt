@@ -8,6 +8,7 @@ export const AuthProvider = ({children}) => {
     const [isLoading, setLoading] = React.useState(false);
     const[token, setToken] = React.useState(localStorage.getItem("token"));
     const [user, setUser] = React.useState("");
+    let userID = null;
 
     const storeTokenInLS = (serverToken) => {
         setToken(serverToken);
@@ -35,7 +36,9 @@ export const AuthProvider = ({children}) => {
             if (response.ok) {
                 const data = await response.json();
                 const userData = data.msg;
+                console.log(userData);
                 setUser(userData);
+                userID = userData._id;
             }
         }
         catch (err) {
@@ -48,7 +51,7 @@ export const AuthProvider = ({children}) => {
         userAuthentication();
     }, [token]);
     
-    return (<AuthContext.Provider value={{isLoggedIn, storeTokenInLS, LogoutUser, user}}>
+    return (<AuthContext.Provider value={{isLoggedIn, storeTokenInLS, LogoutUser, user, userID}}>
         {isLoading?<><DummyHeader /><Loader /></> :children}
     </AuthContext.Provider>);
 };

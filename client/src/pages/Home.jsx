@@ -112,7 +112,7 @@ const features = [
                   disabled={isLoading}
                 >
                   {isLoading ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader className="mr-2 h-4 w-4 animate-spin" />
                   ) : (
                     "Start Writing"
                   )}
