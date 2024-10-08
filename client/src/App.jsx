@@ -12,6 +12,7 @@ import DashboardPage from './pages/DashboardPage.jsx';
 import CreateBlogPage from './pages/CreateBlogPage.jsx';
 import NewHeader from './components/NewHeader.jsx'
 
+import CreateBlogPage from './pages/CreateBlogPage.jsx';
 
 function App() {
   return (
@@ -26,6 +27,8 @@ function App() {
           <Route path='/posthome' element={<><PostHomePage /></>} />
           <Route path='/dashboard' element={<><DashboardPage /></>} />
           <Route path='/createblog' element={<><CreateBlogPage /></>} />
+          <Route path='/prehome' element={<><Header /><PreHome /></>} />
+          <Route path='/createblogpage' element={<><Header /><CreateBlogPage /></>} />
         </Routes>
       </BrowserRouter>
     </>

@@ -22,11 +22,9 @@ const authMiddleware = async (req, res, next) => {
     catch (err) {
         const status = 401;
         const message = "User Token is Unauthorized";
-        const extraDetails = "";
         const errorDetails = {
             message,
-            status,
-            extraDetails
+            status
         }
         next(errorDetails);
     }

@@ -50,7 +50,7 @@ function Login() {
         }
         else {
             const res_data = await response.json();
-            toast(res_data.extraDetails);
+            toast(res_data.message);
         }
     }
     const serverMessage = "The Server Can Take Upto 90 Seconds Due To Inactivity";

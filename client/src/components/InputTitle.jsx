@@ -1,6 +1,6 @@
 import React from "react";
 
-function InputArea(props) {
+function InputTitle(props) {
     return (
         <div className="max-w-full my-7 mx-7">
             <label className="text-xl text-black" htmlFor={props.name}>{props.text}</label><br />
@@ -10,7 +10,7 @@ function InputArea(props) {
                 name={props.name}
                 placeholder={props.placeholder}
                 value={props.value}
-                rows={props.rows || 6} 
+                rows={props.rows || 1} 
                 cols={props.cols || 180} 
                 autoComplete="off"
                 required
@@ -21,4 +21,4 @@ function InputArea(props) {
     );
 }
 
-export default InputArea;
+export default InputTitle;
