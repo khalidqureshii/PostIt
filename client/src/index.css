@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+}
+
+body {
+  /* background-color: #242424; */
+  background-color: #ffefda;
+  background-image: url("/wall_paper.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* .backgroundImage{
+  background-image: url("public/wall_paper.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+} */
+
+.loginImage {
+  background-image: url("/loginImage.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.bodyColor {
+  background-color: #ffefda;
+}
+
+/* Input area background and text color */
+.inputArea {
+  background-color: #f4d4b7;
+  color: #b33c86; /* Dark pink for the text in input fields */
+}
+
+.background {
+  background-color: #602e17;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  color: #000000;
+}
+
+/* Custom button styling */
+.customButton {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.4em 1em;
+  font-size: 1.1em;
+  font-weight: 500;
+  font-family: inherit;
+  color: #ffffffde;
+  background-color: #845c46;
+  cursor: pointer;
+}
+
+.customButton:hover {
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+  background-color: #543310;
+}
+
+.customButton:focus,
+.customButton:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.outer-shadow {
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.button-shadow {
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+  border: 3px solid #f4d4b7;
+}
