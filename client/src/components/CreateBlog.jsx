@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import InputArea from "./InputArea";
-import BlogEntry from "../../../server/models/blog-model";
 import { useNavigate } from "react-router-dom";
-import '../App.css';
+import { User, PenTool, LogOut, ChevronDown, Home, FileText } from 'lucide-react';
 import { useAuth } from "../store/Auth";
-import { User, Home, FileText, LogOut, ChevronDown } from 'lucide-react';
+import Button from './ui/Button';
 
 const CreateBlog = () => {
   const navigate = useNavigate();
@@ -13,6 +12,7 @@ const CreateBlog = () => {
   const currUserID = user._id;
   const currUsername = user.username;
   const allTags = ["Technology", "Health", "Lifestyle", "Education", "Travel", "Sports", "Food", "Fitness", "Business", "Others"];
+  
   const [formData, setFormData] = useState({
     userID: currUserID,
     username: currUsername,
@@ -44,7 +44,6 @@ const CreateBlog = () => {
   };
 
   const handleLogout = () => {
-    // Add your logout logic here
     navigate('/login');
   };
 
@@ -87,114 +86,134 @@ const CreateBlog = () => {
   };
 
   return (
-    <div className="min-h-screen relative">
-      {/* Header with Profile Icon */}
-      <header className="fixed top-0 w-full bg-[#D8B395]/90 backdrop-blur-sm shadow-lg z-50">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold text-[#8B4513] tracking-tight">
-              <span className="relative group cursor-pointer" onClick={() => navigate('/posthome')}>
-                PostIt
-                <span className="absolute -bottom-2 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[#8B4513] to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-              </span>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 text-slate-800 font-sans">
+      {/* Navbar */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/10 backdrop-blur-md border-b border-white/20">
+        <div className="container mx-auto px-6">
+          <div className="flex items-center justify-between h-24">
+            <h1 
+              className="text-slate-800 text-4xl font-bold tracking-tight cursor-pointer"
+              onClick={() => navigate('/posthome')}
+            >
+              Post-it
             </h1>
+            <div className="flex items-center space-x-6">
+              {/* Profile Dropdown */}
+              <div className="relative">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className="bg-white/50 text-slate-800 hover:bg-white/70 hover:text-orange-600 transition-all duration-300 shadow-md hover:shadow-lg rounded-full flex items-center py-3 px-6 text-lg"
+                >
+                  <User className="h-5 w-5 mr-2" />
+                  <span className="mr-1">Profile</span>
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                </Button>
 
-            {/* Profile Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center space-x-2 px-4 py-2 rounded-full text-[#8B4513] hover:bg-[#E8D0B8]
-                        transition-all duration-300 hover:scale-105"
-              >
-                <User className="h-5 w-5" />
-                <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
-              </button>
-
-              {/* Dropdown Menu */}
-              {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50
-                              border border-[#D8B395]/20 animate-fadeIn">
-                  <button
-                    onClick={() => navigate('/posthome')}
-                    className="flex items-center w-full px-4 py-2 text-[#8B4513] hover:bg-[#E8D0B8]/20
-                              transition-colors duration-200"
-                  >
-                    <Home className="h-4 w-4 mr-2" />
-                    Home
-                  </button>
-                  <button
-                    onClick={() => navigate('/dashboard')}
-                    className="flex items-center w-full px-4 py-2 text-[#8B4513] hover:bg-[#E8D0B8]/20
-                              transition-colors duration-200"
-                  >
-                    <FileText className="h-4 w-4 mr-2" />
-                    Your Posts
-                  </button>
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center w-full px-4 py-2 text-[#8B4513] hover:bg-[#E8D0B8]/20
-                              transition-colors duration-200"
-                  >
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Logout
-                  </button>
-                </div>
-              )}
+                {/* Dropdown Menu */}
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 border border-slate-100 animate-fadeIn">
+                    <button
+                      onClick={() => navigate('/posthome')}
+                      className="flex items-center w-full px-4 py-2 text-slate-700 hover:bg-orange-50 transition-colors duration-200"
+                    >
+                      <Home className="h-4 w-4 mr-2" />
+                      Home
+                    </button>
+                    <button
+                      onClick={() => navigate('/dashboard')}
+                      className="flex items-center w-full px-4 py-2 text-slate-700 hover:bg-orange-50 transition-colors duration-200"
+                    >
+                      <FileText className="h-4 w-4 mr-2" />
+                      Your Posts
+                    </button>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center w-full px-4 py-2 text-slate-700 hover:bg-orange-50 transition-colors duration-200"
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </header>
+      </nav>
 
       {/* Main Content */}
-      <div className="flex justify-center items-center min-h-screen m-10 pt-20">
-        <div className="w-full max-w-[73%] bg-white outer-shadow p-8 rounded-xl shadow-lg bodyColor">
-          <h1 className="text-3xl mb-4 text-center text-black font-cambria font-bold">
-            Create a New Blog
-          </h1>
-          <InputArea
-            text="Title"
-            name="title"
-            value={formData.title}
-            changeFunction={changeFunction}
-            placeholder="Enter Blog Title"
-            rows={2}
-            cols={180}
-            className="text-pink-800" // Added dark pink color for the title
-          />
-          <InputArea
-            text="Content"
-            name="body"
-            value={formData.body}
-            changeFunction={changeFunction}
-            placeholder="Enter Blog Content"
-            rows={9}
-            cols={180}
-            className="text-pink-800" // Added dark pink color for the content
-          />
-          {/* Tag selection */}
-          <div className="mb-4 ml-7">
-            <h2 className="text-xl text-black mb-2">Select Tags</h2>
-            <div className="flex flex-wrap gap-2">
-              {allTags.map(tag => (
-                <button
-                  key={tag}
-                  className={`px-4 py-2 border text-md border-gray-400 rounded-lg transition-colors duration-200 ${formData.tags.includes(tag) ? 'inputArea text-black button-shadow' : 'bg-white text-black'}`}
-                  onClick={() => toggleTag(tag)}
-                >
-                  {tag}
-                </button>
-              ))}
-            </div>
+      <div className="container mx-auto px-6 pt-32 pb-20">
+        <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="h-40 bg-gradient-to-r from-orange-400 to-amber-300 flex items-center justify-center">
+            <PenTool className="h-16 w-16 text-white opacity-30" />
           </div>
+          
+          <div className="p-8">
+            <h1 className="text-3xl font-bold text-slate-800 mb-8 text-center">
+              Create a New Post
+            </h1>
 
-          <div className="mt-6 flex justify-center text-xl font-bold">
-            <button
-              type="submit"
-              className="customButton w-30"
-              onClick={handleSubmit}
-            >
-              Post-It
-            </button>
+            {/* Title Input */}
+            <div className="mb-6">
+              <label className="block text-slate-700 text-lg font-medium mb-2">
+                Title
+              </label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={changeFunction}
+                placeholder="Enter your post title"
+                className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300"
+              />
+            </div>
+
+            {/* Content Input */}
+            <div className="mb-6">
+              <label className="block text-slate-700 text-lg font-medium mb-2">
+                Content
+              </label>
+              <textarea
+                name="body"
+                value={formData.body}
+                onChange={changeFunction}
+                placeholder="Write your post content"
+                rows="8"
+                className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300"
+              />
+            </div>
+
+            {/* Tags Selection */}
+            <div className="mb-8">
+              <h2 className="text-lg font-medium text-slate-700 mb-3">Select Tags</h2>
+              <div className="flex flex-wrap gap-3">
+                {allTags.map(tag => (
+                  <button
+                    key={tag}
+                    onClick={() => toggleTag(tag)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-300 ${
+                      formData.tags.includes(tag)
+                        ? 'bg-orange-500 text-white'
+                        : 'bg-white text-orange-500 hover:bg-orange-100 border border-orange-500'
+                    }`}
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <div className="flex justify-center">
+              <Button
+                onClick={handleSubmit}
+                className="bg-gradient-to-r from-orange-400 to-orange-600 text-white hover:from-orange-500 hover:to-orange-700 transition-all duration-300 shadow-md hover:shadow-lg rounded-full flex items-center py-3 px-8 text-lg"
+              >
+                <PenTool className="mr-2 h-5 w-5" />
+                Post It
+              </Button>
+            </div>
           </div>
         </div>
       </div>

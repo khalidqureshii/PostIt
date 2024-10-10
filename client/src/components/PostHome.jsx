@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Heart, X } from 'lucide-react';
+import { Heart, X, Pen, Users, BookOpen, PenTool, Filter } from 'lucide-react';
 import { User } from 'lucide-react';
+import Button from './ui/Button';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Extended posts data with content
+const allTags = ["Technology", "Health", "Lifestyle", "Education", "Productivity"];
+
 const initialPosts = [
   {
     id: 1,
@@ -20,7 +24,7 @@ const initialPosts = [
     • Component lifecycle methods
     • Best practices for React development
 
-    Whether you're new to web development or an experienced developer looking to add React to your toolkit, this guide will help you build a solid foundation in React development.`
+    Whether you're new to web development or an experienced developer looking to add React to your toolkit, this guide will help you build a solid foundation in React development.`,
   },
   {
     id: 2,
@@ -36,44 +40,17 @@ const initialPosts = [
     • Build a productivity system that works with your natural tendencies
     • Transform procrastination into a strategic tool
 
-    Discover how to make procrastination work for you instead of against you.`
-  }
+    Discover how to make procrastination work for you instead of against you.`,
+  },
 ];
-
-const BackgroundSVG = () => (
-  <svg className="fixed inset-0 w-full h-full -z-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
-    <defs>
-      <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style={{stopColor:"#ffeee4"}} />
-        <stop offset="100%" style={{stopColor:"#fff5ef"}} />
-      </linearGradient>
-      <path id="wave" d="M 0,50 C 150,0 350,100 500,50 C 650,0 850,100 1000,50" />
-    </defs>
-    
-    <rect width="100%" height="100%" fill="url(#bgGradient)" />
-    
-    <g opacity="0.3">
-      <use href="#wave" stroke="#d4b5a5" fill="none" transform="translate(0,0)" />
-      <use href="#wave" stroke="#d4b5a5" fill="none" transform="translate(0,400)" />
-    </g>
-    
-    <path d="M 900,50 C 920,40 930,60 920,70 C 910,80 890,70 900,50" 
-          fill="none" stroke="#d4b5a5" opacity="0.4" />
-    <path d="M 100,500 C 120,490 130,510 120,520 C 110,530 90,520 100,500" 
-          fill="none" stroke="#d4b5a5" opacity="0.4" />
-    
-    <g opacity="0.5">
-      <path d="M 150,150 l 5,-5 l -5,-5 l -5,5 z" fill="#d4b5a5" />
-      <path d="M 850,450 l 5,-5 l -5,-5 l -5,5 z" fill="#d4b5a5" />
-    </g>
-  </svg>
-);
 
 export default function PostHome() {
   const navigate = useNavigate();
   const [selectedPost, setSelectedPost] = useState(null);
   const [posts, setPosts] = useState(initialPosts);
   const [likedPosts, setLikedPosts] = useState({});
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [filteredPosts, setFilteredPosts] = useState(posts);
 
   const handlePostClick = (post) => {
     setSelectedPost(post);
@@ -84,156 +61,195 @@ export default function PostHome() {
   };
 
   const handleLike = (e, postId) => {
-    e.stopPropagation(); // Prevent post modal from opening when clicking like
-    
-    setPosts(currentPosts => {
-      return currentPosts.map(post => {
-        if (post.id === postId) {
-          const isCurrentlyLiked = likedPosts[postId];
-          const newLikes = isCurrentlyLiked ? post.likes - 1 : post.likes + 1;
-          return { ...post, likes: newLikes };
-        }
-        return post;
-      });
-    });
+    e.stopPropagation();
+    setPosts(currentPosts => currentPosts.map(post => 
+      post.id === postId ? { ...post, likes: likedPosts[postId] ? post.likes - 1 : post.likes + 1 } : post
+    ));
+    setLikedPosts(current => ({ ...current, [postId]: !current[postId] }));
+  };
 
-    setLikedPosts(current => ({
-      ...current,
-      [postId]: !current[postId]
-    }));
+  const handleTagClick = (tag) => {
+    setSelectedTags(current => 
+      current.includes(tag)
+        ? current.filter(t => t !== tag)
+        : [...current, tag]
+    );
   };
 
   return (
-    <div className="min-h-screen relative">
-      <BackgroundSVG />
-      
-      <header className="fixed top-0 w-full bg-[#D8B395]/90 backdrop-blur-sm shadow-lg z-50">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold text-[#8B4513] tracking-tight">
-              <span className="relative group">
-                PostIt
-                <span className="absolute -bottom-2 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[#8B4513] to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-              </span>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 text-slate-800 font-sans">
+      {/* Navbar */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/10 backdrop-blur-md border-b border-white/20">
+        <div className="container mx-auto px-6">
+          <div className="flex items-center justify-between h-24">
+            <h1 className="text-slate-800 text-4xl font-bold tracking-tight">
+              Post-it
             </h1>
-            <div className="flex gap-4">
-              <button 
-                className="px-4 py-2 rounded-full border border-[#8B4513] text-[#8B4513] 
-                          hover:bg-[#E8D0B8] hover:border-transparent
-                          transition-all duration-300 hover:scale-105"
-                onClick={() => navigate('/createblog')}
-              >
-                Add Blog
-              </button>
-              <button 
-                className="p-2 rounded-full text-[#8B4513] hover:bg-[#E8D0B8]
-                          transition-all duration-300 hover:scale-105
-                          flex items-center justify-center"
+            <div className="flex items-center space-x-6">
+              <Button
+                variant="outline"
+                className="bg-white/50 text-slate-800 hover:bg-white/70 hover:text-orange-600 transition-all duration-300 shadow-md hover:shadow-lg rounded-full flex items-center py-3 px-6 text-lg"
                 onClick={() => navigate('/dashboard')}
               >
-                <User size={24} />
-              </button>
+                <User className="mr-3 h-5 w-5" />
+                <span>Dashboard</span>
+              </Button>
+              <Button
+                className="bg-gradient-to-r from-orange-400 to-orange-600 text-white hover:from-orange-500 hover:to-orange-700 transition-all duration-300 shadow-md hover:shadow-lg rounded-full flex items-center py-3 px-6 text-lg"
+                onClick={() => navigate('/createblog')}
+              >
+                <PenTool className="mr-3 h-5 w-5" />
+                <span>New Post</span>
+              </Button>
             </div>
           </div>
         </div>
-      </header>
+      </nav>
 
-      <main className="container mx-auto px-6 pt-28 pb-20 max-w-4xl">
-        <div className="grid gap-8">
-          {posts.map((post) => (
-            <div key={post.id} 
+      {/* Tag Filtering Section */}
+      <div className="container mx-auto px-6 pt-32">
+        <div className="mb-8">
+          <h3 className="text-2xl font-semibold mb-4 flex items-center">
+            <Filter className="mr-2" /> Filter by Tags
+          </h3>
+          <div className="flex flex-wrap gap-3">
+            {allTags.map(tag => (
+              <button
+                key={tag}
+                onClick={() => handleTagClick(tag)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-300 ${
+                  selectedTags.includes(tag)
+                    ? 'bg-orange-500 text-white'
+                    : 'bg-white text-orange-500 hover:bg-orange-100'
+                }`}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <main className="container mx-auto px-6 pb-20">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-4xl font-bold text-center mb-12 text-slate-800"
+        >
+          Discover Inspiring Posts
+        </motion.h2>
+
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {posts.map((post, index) => (
+            <motion.div
+              key={post.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: index * 0.1 }}
               onClick={() => handlePostClick(post)}
-              className="group relative overflow-hidden cursor-pointer
-                         bg-white border-none rounded-lg shadow-md
-                         hover:shadow-xl hover:shadow-[#8B4513]/30
-                         transition-all duration-500 ease-out
-                         hover:-translate-y-1 hover:scale-[1.02]">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#E8D0B8]/0 via-[#E8D0B8]/10 to-[#E8D0B8]/0
-                              translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-              <div className="relative p-8">
-                <div className="flex justify-between items-start mb-6">
-                  <h2 className="text-2xl font-semibold text-[#8B4513] mb-3 
-                               transition-colors duration-300 group-hover:text-[#654321]">
-                    {post.title}
-                  </h2>
+              className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group"
+            >
+              <div className="h-48 bg-gradient-to-r from-orange-400 to-amber-300 flex items-center justify-center">
+                <span className="text-6xl text-white opacity-30 group-hover:opacity-50 transition-opacity duration-300">
+                  {post.title[0].toUpperCase()}
+                </span>
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-semibold mb-2 text-slate-800 group-hover:text-orange-600 transition-colors duration-300">{post.title}</h3>
+                <p className="text-slate-600 mb-4 text-sm">By {post.author}</p>
+                <div className="flex justify-between items-center">
+                  <div className="flex flex-wrap gap-2">
+                    {post.tags.map((tag, idx) => (
+                      <span key={idx} className="px-2 py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-medium">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                   <button 
-                    onClick={(e) => handleLike(e, post.id)}
-                    className="flex items-center text-[#8B4513] space-x-2
-                              transition-transform duration-300 group-hover:scale-110"
+                    onClick={(e) => handleLike(e, post.id)} 
+                    className="flex items-center text-slate-500 hover:text-orange-600 transition-colors duration-300"
                   >
-                    <Heart 
-                      className={`h-5 w-5 mr-1 transition-colors duration-300
-                                ${likedPosts[post.id] ? 'fill-current text-[#D8B395]' : 'group-hover:text-[#D8B395]'}`} 
-                    />
+                    <Heart className={`h-5 w-5 mr-1 ${likedPosts[post.id] ? 'fill-orange-500 text-orange-500' : 'stroke-current'}`} />
                     <span className="text-sm font-medium">{post.likes}</span>
                   </button>
                 </div>
-                <p className="text-[#8B4513] mb-4">
-                  By <span className="font-medium">{post.author}</span>
-                </p>
-                <div className="flex gap-2 mt-4">
-                  {post.tags.map((tag, index) => (
-                    <span key={index} 
-                      className="px-3 py-1 rounded-full text-xs font-medium
-                               bg-[#D8B395] text-[#8B4513]
-                               transition-all duration-300
-                               hover:bg-[#E8D0B8] hover:scale-105">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </main>
 
-      {selectedPost && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[80vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b border-[#D8B395] p-6 flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-[#8B4513]">{selectedPost.title}</h2>
-              <button 
-                onClick={closePost}
-                className="text-[#8B4513] hover:text-[#654321] transition-colors"
-              >
-                <X className="h-6 w-6" />
-              </button>
-            </div>
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <p className="text-[#8B4513]">By <span className="font-medium">{selectedPost.author}</span></p>
-                <button 
-                  onClick={(e) => handleLike(e, selectedPost.id)}
-                  className="flex items-center text-[#8B4513]"
-                >
-                  <Heart 
-                    className={`h-5 w-5 mr-1 transition-colors duration-300
-                              ${likedPosts[selectedPost.id] ? 'fill-current text-[#D8B395]' : 'hover:text-[#D8B395]'}`}
-                  />
-                  <span className="text-sm font-medium">{selectedPost.likes}</span>
-                </button>
-              </div>
-              <div className="prose prose-brown max-w-none">
-                {selectedPost.content.split('\n').map((paragraph, index) => (
-                  <p key={index} className="mb-4 text-[#8B4513] leading-relaxed">
-                    {paragraph.trim()}
-                  </p>
-                ))}
-              </div>
-              <div className="flex gap-2 mt-6">
-                {selectedPost.tags.map((tag, index) => (
-                  <span key={index} 
-                    className="px-3 py-1 rounded-full text-xs font-medium
-                             bg-[#D8B395] text-[#8B4513]">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {filteredPosts.map((post, index) => (
+            <motion.div
+              key={post.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: index * 0.1 }}
+              onClick={() => handlePostClick(post)}
+              className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group"
+            >
+              {/* ... (post card content remains the same) ... */}
+            </motion.div>
+          ))}
         </div>
-      )}
+        
+        {/* Post Modal */}
+        <AnimatePresence>
+          {selectedPost && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+              onClick={closePost}
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[80vh] overflow-hidden"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="h-40 bg-gradient-to-r from-orange-400 to-amber-300 flex items-center justify-center relative">
+                  <span className="text-8xl text-white opacity-30">
+                    {selectedPost.title[0].toUpperCase()}
+                  </span>
+                  <Button variant="ghost" onClick={closePost} className="absolute top-4 right-4 text-white hover:bg-white/20">
+                    <X className="h-6 w-6" />
+                  </Button>
+                </div>
+                <div className="p-8 overflow-y-auto max-h-[calc(80vh-10rem)]">
+                  <h2 className="text-3xl font-bold text-slate-800 mb-4">{selectedPost.title}</h2>
+                  <div className="flex items-center justify-between mb-6">
+                    <p className="text-slate-600">By <span className="font-medium">{selectedPost.author}</span></p>
+                    <button 
+                      onClick={(e) => handleLike(e, selectedPost.id)} 
+                      className="flex items-center text-slate-500 hover:text-orange-600 transition-colors duration-300"
+                    >
+                      <Heart className={`h-5 w-5 mr-1 ${likedPosts[selectedPost.id] ? 'fill-orange-500 text-orange-500' : 'stroke-current'}`} />
+                      <span className="font-medium">{selectedPost.likes}</span>
+                    </button>
+                  </div>
+                  <div className="prose prose-slate max-w-none mb-6">
+                    {selectedPost.content.split('\n').map((paragraph, index) => (
+                      <p key={index} className="mb-4 text-slate-700 leading-relaxed">{paragraph.trim()}</p>
+                    ))}
+                  </div>
+                  <div className="flex flex-wrap gap-2 mt-6">
+                    {selectedPost.tags.map((tag, index) => (
+                      <span key={index} className="px-2 py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-medium">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </main>
     </div>
   );
 }
