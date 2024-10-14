@@ -6,45 +6,6 @@ import Button from './ui/Button';
 import { motion, AnimatePresence } from 'framer-motion';
 import LINK from "../store/Link"
 
-// Extended posts data with content
-// const allTags = ["Technology", "Health", "Lifestyle", "Education", "Productivity"];
-
-// const initialPosts = [
-//   {
-//     id: 1,
-//     title: "Getting Started with React",
-//     author: "John Doe",
-//     likes: 15,
-//     tags: ["React", "JavaScript"],
-//     content: `React is a powerful JavaScript library for building user interfaces. In this comprehensive guide, we'll walk through the fundamentals of React and help you get started with your first React application.
-
-//     Key topics we'll cover:
-//     • Understanding components and props
-//     • State management basics
-//     • Handling events in React
-//     • Component lifecycle methods
-//     • Best practices for React development
-
-//     Whether you're new to web development or an experienced developer looking to add React to your toolkit, this guide will help you build a solid foundation in React development.`,
-//   },
-//   {
-//     id: 2,
-//     title: "The Art of Productive Procrastination",
-//     author: "Jane Smith",
-//     likes: 8,
-//     tags: ["Productivity", "Lifestyle"],
-//     content: `We often think of procrastination as the enemy of productivity, but what if we could turn it into an ally? This post explores the concept of productive procrastination and how to make it work for you.
-
-//     Learn how to:
-//     • Channel procrastination energy effectively
-//     • Use structured procrastination to complete important tasks
-//     • Build a productivity system that works with your natural tendencies
-//     • Transform procrastination into a strategic tool
-
-//     Discover how to make procrastination work for you instead of against you.`,
-//   },
-// ];
-
 export default function PostHome() {
   const navigate = useNavigate();
   const [selectedPost, setSelectedPost] = useState(null);

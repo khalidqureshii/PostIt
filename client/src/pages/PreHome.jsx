@@ -3,11 +3,11 @@ import react from  "react";
 import { useNavigate } from "react-router-dom";
 
 function PreHome() {
-    const [isLoggedIn, changeLogin] = useState(hasLoggedIn());
-    const loginButton = <button className="mx-5 w-32 h-14 customButton text-[#ffffffde]" onClick={()=>navigate("/login")}><h6 className="text-2xl">Login</h6></button>;
-    const registerButton = <button className="mx-5 w-32 h-14 customButton" onClick={()=>navigate("/register")}><h6 className="text-2xl">Register</h6></button>;
-    const navigate = useNavigate();
-
+  const loginButton = <button className="mx-5 w-32 h-14 customButton text-[#ffffffde]" onClick={()=>navigate("/login")}><h6 className="text-2xl">Login</h6></button>;
+  const registerButton = <button className="mx-5 w-32 h-14 customButton" onClick={()=>navigate("/register")}><h6 className="text-2xl">Register</h6></button>;
+  const navigate = useNavigate();
+  
+  const [isLoggedIn, changeLogin] = useState(hasLoggedIn());
     function hasLoggedIn() {
         const currToken = localStorage.getItem("token");
         if (currToken == null) return false;

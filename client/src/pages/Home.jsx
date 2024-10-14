@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { FaPen, FaUsers, FaBookOpen, FaArrowRight, FaGithub } from "react-icons/fa";
 import  Button  from "@/components/ui/button.jsx";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../store/Auth";
+import { useState, useEffect } from "react";
 
 const mockUser = {
   username: "Demo User"
@@ -33,6 +34,22 @@ function Home() {
   const [isLoading, setLoading] = useState(false);
   const displayName = user ? `, ${user.username}` : "";
   const navigate = useNavigate();
+
+  const [isLoggedIn, changeLogin] = useState(hasLoggedIn());
+    function hasLoggedIn() {
+        const currToken = localStorage.getItem("token");
+        if (currToken == null) return false;
+        else return true;
+    }
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            
+        }
+        else {
+          navigate("/login");
+        }
+    }, [isLoggedIn]);
 
   const handleStartWriting = () => {
     setLoading(true);

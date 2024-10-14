@@ -44,7 +44,7 @@ const CreateBlog = () => {
   };
 
   const handleLogout = () => {
-    navigate('/login');
+    navigate('/logout');
   };
 
   async function handleSubmit() {

@@ -16,6 +16,21 @@ function DashboardPage() {
   const [selectedPost, setSelectedPost] = useState(null);
   const [posts, setPosts] = useState([]);
   const { user } = useAuth();
+  const [isLoggedIn, changeLogin] = useState(hasLoggedIn());
+    function hasLoggedIn() {
+        const currToken = localStorage.getItem("token");
+        if (currToken == null) return false;
+        else return true;
+    }
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            
+        }
+        else {
+          navigate("/login");
+        }
+    }, [isLoggedIn]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
