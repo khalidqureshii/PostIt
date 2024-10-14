@@ -52,6 +52,24 @@ function DashboardPage() {
     setSelectedPost(null);
   };
 
+  async function deletePost(props) {
+    try {
+      console.log(props._id);
+      const response = await fetch(LINK + "api/blog/deleteBlog", {
+        method:"DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body:JSON.stringify({blogID: selectedPost._id})
+      })
+        const data = await response.json();
+        console.log(data);
+        setSelectedPost(null);
+        fetchPosts();
+    } catch (error) {
+        console.error('Error Deleting post:', error);
+    }
+  }
 
   return (
     <div className="App min-h-screen flex flex-col bg-custom">
@@ -143,7 +161,7 @@ function DashboardPage() {
           )}
         </AnimatePresence>
 
-        <main className="container mx-auto px-6 pb-20">
+        <main className="container mx-auto px-6 pb-20 mt-8">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -229,6 +247,12 @@ function DashboardPage() {
                   <Button variant="ghost" onClick={closePost} className="absolute top-4 right-4 text-white hover:bg-white/20">
                     X
                   </Button>
+                  <button 
+                onClick={deletePost}
+                className="text-[#8B4513] hover:text-[#654321] transition-colors"
+              >
+                Delete
+              </button>
                 </div>
                 <div className="p-8 overflow-y-auto max-h-[calc(80vh-10rem)]">
                   <h2 className="text-3xl font-bold text-slate-800 mb-4">{selectedPost.title}</h2>

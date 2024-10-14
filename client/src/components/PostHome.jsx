@@ -53,24 +53,23 @@ export default function PostHome() {
   const [selectedTags, setSelectedTags] = useState([]);
   // const [filteredPosts, setFilteredPosts] = useState(posts);
 
+  const fetchPosts = async () => {
+      try {
+        const response = await fetch(LINK + "api/blog/getBlogs", {
+          method:"GET",
+          headers: {
+            "Content-Type": "application/json"
+          }
+          
+        })
+          const data = await response.json();
+          setPosts(data.allEntries);
+          setPostLoaded(true);
+      } catch (error) {
+          console.error('Error fetching posts:', error);
+      }
+  };
   useEffect(() => {
-    const fetchPosts = async () => {
-        try {
-          const response = await fetch(LINK + "api/blog/getBlogs", {
-            method:"GET",
-            headers: {
-              "Content-Type": "application/json"
-            }
-            
-          })
-            const data = await response.json();
-            setPosts(data.allEntries);
-            setPostLoaded(true);
-        } catch (error) {
-            console.error('Error fetching posts:', error);
-        }
-    };
-
     fetchPosts();
   }, []);
 
@@ -154,7 +153,7 @@ export default function PostHome() {
       </div> */}
 
       {/* Main Content */}
-      <main className="container mx-auto px-6 pb-20">
+      <main className="container mx-auto px-6 pb-20 mt-32">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
