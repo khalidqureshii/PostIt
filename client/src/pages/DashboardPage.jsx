@@ -8,6 +8,7 @@ import LINK from "../store/Link"
 import { Search, FileText, Home, PenTool, Menu, Crown, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useAuth from '../store/Auth';
+import { MdDeleteForever } from "react-icons/md";
 
 function DashboardPage() {
   const navigate = useNavigate();
@@ -248,11 +249,11 @@ function DashboardPage() {
                     X
                   </Button>
                   <button 
-                onClick={deletePost}
-                className="text-[#8B4513] hover:text-[#654321] transition-colors"
-              >
-                Delete
-              </button>
+                    onClick={deletePost}
+                    className="text-[#8B4513] hover:text-[#654321] transition-colors absolute top-4 right-8"
+                  >
+                    <MdDeleteForever size='1.65em' color="white"/>
+                  </button>
                 </div>
                 <div className="p-8 overflow-y-auto max-h-[calc(80vh-10rem)]">
                   <h2 className="text-3xl font-bold text-slate-800 mb-4">{selectedPost.title}</h2>
