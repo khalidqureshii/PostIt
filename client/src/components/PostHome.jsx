@@ -134,11 +134,11 @@ export default function PostHome() {
               onClick={() => handlePostClick(post)}
               className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group"
             >
-              <div className="h-48 bg-gradient-to-r from-orange-400 to-amber-300 flex items-center justify-center">
+              {/* <div className="h-48 bg-gradient-to-r from-orange-400 to-amber-300 flex items-center justify-center">
                 <span className="text-6xl text-white opacity-30 group-hover:opacity-50 transition-opacity duration-300">
                   {post.title[0].toUpperCase()}
                 </span>
-              </div>
+              </div> */}
               <div className="p-6">
                 <h3 className="text-xl font-semibold mb-2 text-slate-800 group-hover:text-orange-600 transition-colors duration-300">{post.title}</h3>
                 <p className="text-slate-600 mb-4 text-sm">By {post.username}</p>
